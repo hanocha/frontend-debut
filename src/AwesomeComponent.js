@@ -1,19 +1,30 @@
 import React, { Component } from 'react';
+import SuperAgent from 'superagent'
 
 class AwesomeComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      num: props.num
+      num: null
     };
   }
 
   componentDidMount() {
-    /* コンポーネントレンダリング後に実行されるコード */
+    this.getNumFromServer();
   }
 
   getNumFromServer() {
-    /* ここにAPIを叩いてデータを取ってくるコード */
+    console.log('getNumFromServer called!')
+    SuperAgent
+      .get("https://en.wikipedia.org/w/api.php?action=query&titles=Main%20Page&prop=revisions&rvprop=content&format=json")
+      .end((function(err, res){
+        if(err || !res.ok) {
+          console.log(err)
+        }
+        else {
+          console.log(res.body)
+        }
+      }));
   }
 
   render() {
